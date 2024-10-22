@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Amortization Calculator</title>
+</head>
+<body>
+<h2>Loan and Amortization Calculator</h2>
+<form id="loanForm">
+    <label for="borrowingYear1">Borrowing Year 1:</label>
+    <input type="number" id="borrowingYear1" required oninput="updateBorrowingYears()"><br><br>
+
+    <label for="loanAmt1">Loan Amount (<span id="year1Display"></span>):</label>
+    <input type="number" id="loanAmt1" step="0.01" required><br><br>
+
+    <label for="loanAmt2">Loan Amount (<span id="year2Display"></span>):</label>
+    <input type="number" id="loanAmt2" step="0.01" required><br><br>
+
+    <label for="loanAmt3">Loan Amount (<span id="year3Display"></span>):</label>
+    <input type="number" id="loanAmt3" step="0.01" required><br><br>
+
+    <label for="loanAmt4">Loan Amount (<span id="year4Display"></span>):</label>
+    <input type="number" id="loanAmt4" step="0.01" required><br><br>
+
+    <button type="button" onclick="calculateDebt()">Calculate</button>
+</form>
+
+<h3>Results</h3>
+<p id="totalDebt">Total Debt: </p>
+<p id="amortization">Annual Amortization Payments: </p>
+
+<h3>Amortization Schedule</h3>
+<table id="amortizationTable" border="1">
+    <thead>
+        <tr>
+            <th>Year</th>
+            <th>Payment</th>
+            <th>Interest</th>
+            <th>Principal</th>
+            <th>Remaining Debt</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+function updateBorrowingYears() {
+    // Get Borrowing Year 1 from input
+    const borrowingYear1 = parseInt(document.getElementById('borrowingYear1').value);
+
+    if (!isNaN(borrowingYear1)) {
+        // Dynamically update the displayed borrowing years next to the loan amounts
+        document.getElementById('year1Display').textContent = borrowingYear1;
+        document.getElementById('year2Display').textContent = borrowingYear1 + 1;
+        document.getElementById('year3Display').textContent = borrowingYear1 + 2;
+        document.getElementById('year4Display').textContent = borrowingYear1 + 3;
+    } else {
+        // Clear the display if borrowing year 1 is not valid
+        document.getElementById('year1Display').textContent = '';
+        document.getElementById('year2Display').textContent = '';
+        document.getElementById('year3Display').textContent = '';
+        document.getElementById('year4Display').textContent = '';
+    }
+}
+
+function calculateDebt() {
+    // Get Borrowing Year 1 and Loan Amounts
+    const borrowingYear1 = parseInt(document.getElementById('borrowingYear1').value);
+    const loanAmt1 = parseFloat(document.getElementById('loanAmt1').value);
+    const loanAmt2 = parseFloat(document.getElementById('loanAmt2').value);
+    const loanAmt3 = parseFloat(document.getElementById('loanAmt3').value);
+    const loanAmt4 = parseFloat(document.getElementById('loanAmt4').value);
+
+    // Automatically generate Borrowing Years 2, 3, and 4
+    const borrowingYear2 = borrowingYear1 + 1;
+    const borrowingYear3 = borrowingYear1 + 2;
+    const borrowingYear4 = borrowingYear1 + 3;
+
+    const interestRate = 0.05; // 5% interest
+    const repaymentYears = 10;
+
+    // Calculate total debt with interest
+    let totalDebt = loanAmt1 * Math.pow(1 + interestRate, 3) + // 3 years of interest
+                    loanAmt2 * Math.pow(1 + interestRate, 2) + // 2 years of interest
+                    loanAmt3 * Math.pow(1 + interestRate, 1) + // 1 year of interest
+                    loanAmt4; // no interest for the last borrowing year
+
+    const amortization = (totalDebt * interestRate) / (1 - Math.pow(1 + interestRate, -repaymentYears));
+
+    // Update total debt and amortization payment display
+    document.getElementById('totalDebt').textContent = `Total Debt: $${totalDebt.toFixed(2)}`;
+    document.getElementById('amortization').textContent = `Annual Amortization Payments: $${amortization.toFixed(2)}`;
+
+    // Clear the previous table results
+    const tableBody = document.getElementById('amortizationTable').querySelector('tbody');
+    tableBody.innerHTML = '';
+
+    let balance = totalDebt;
+    
+    // Loop through each year and calculate payment details
+    for (let year = 1; year <= repaymentYears; year++) {
+        const interest = balance * interestRate;
+        const principal = amortization - interest;
+        balance -= principal;
+
+        // Append the new row for each year in the amortization schedule table
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${year}</td>
+            <td>$${amortization.toFixed(2)}</td>
+            <td>$${interest.toFixed(2)}</td>
+            <td>$${principal.toFixed(2)}</td>
+            <td>$${balance.toFixed(2)}</td>
+        `;
+        tableBody.appendChild(row);
+    }
+}
+</script>
+</body>
+</html>
