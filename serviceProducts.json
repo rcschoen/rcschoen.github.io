@@ -1,0 +1,60 @@
+{
+"IT-Services" : [
+    {
+    "id" : 1,
+    "serviceName" : "Standard",
+    "price" : 50,
+    "duration" : "Monthly",
+    "active" : true
+    },
+    {
+    "id" : 2,
+    "serviceName" : "Advanced",
+    "price" : 100,
+    "duration" : "Monthly",
+    "active" : true
+    },
+    {
+    "id" : 3,
+    "serviceName" : "Primium",
+    "price" : 200,
+    "duration" : "Monthly",
+    "active" : true
+    },
+    {
+    "id" : 4,
+    "serviceName" : "IT Course",
+    "price" : 47,
+    "duration" : "One-Time",
+    "active" : false
+    },
+    {
+    "id" : 5,
+    "serviceName" : "IT Evaluation",
+    "price" : 99,
+    "duration" : "One-Time",
+    "active" : true
+    },
+    {
+    "id" : 6,
+    "serviceName" : "Discounted Advanced",
+    "price" : 80,
+    "duration" : "Monthly",
+    "active" : false
+    },
+    {
+    "id" : 7,
+    "serviceName" : "Deluxe",
+    "price" : 500,
+    "duration" : "Monthly",
+    "active" : true
+    },
+    {
+    "id" : 8,
+    "serviceName" : "Full Access",
+    "price" : 1000,
+    "duration" : "One-Time",
+    "active" : true
+    }
+]
+}
